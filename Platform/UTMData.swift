@@ -928,7 +928,7 @@ class UTMData: ObservableObject {
 #if os(iOS)
     @available(iOS 15, *)
     func jitStreamerAttach() {
-        if let url = URL(string: "sidestore://sidejit-enable?url=com.swifticul.UntetherUTM") {
+        if let url = URL(string: "sidestore://sidejit-enable?url=\(Bundle.main.bundleIdentifier ?? "com.swifticul.UntetherUTM")") {
             UIApplication.shared.open(url)
         }
     }
