@@ -104,7 +104,7 @@ private struct VMListModifier: ViewModifier {
         .frame(minWidth: 250, idealWidth: 350)
         #endif
         .listStyle(.sidebar)
-        .navigationTitle(productName)
+        .navigationTitle("UntetherUTM")
         #if os(macOS)
         .navigationSubtitle(data.selectedVM?.detailsTitleLabel ?? "")
         #endif

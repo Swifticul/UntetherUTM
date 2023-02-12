@@ -20,9 +20,9 @@ import IQKeyboardManagerSwift
 #endif
 
 #if WITH_QEMU_TCI
-let productName = "UTM SE"
+let productName = "UntetherUTM SE"
 #else
-let productName = "UTM"
+let productName = "UntetherUTM"
 #endif
 
 struct ContentView: View {
