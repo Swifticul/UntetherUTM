@@ -2,7 +2,7 @@
 
 ## Info
 
-UntetherUTM is a (work-in-progress) UTM client that replaces JitStreamerAttach with sbatupoc to allow for untethered JIT activation when installed using SideStore
+UntetherUTM is a modified UTM client that replaces JitStreamerAttach with sbatupoc to allow for untethered JIT activation when installed using SideStore
 
 ### Requirements
 
@@ -11,7 +11,7 @@ UntetherUTM is a (work-in-progress) UTM client that replaces JitStreamerAttach w
 
 ### Notes
 
-- SideStore can be a bit picky and will not always activate JIT (it does like 90% of the time tho dw). If it doesn't, you can just restart the app or click on the + icon and click "Request JIT from the SideStore servers (sbatupoc)"
+- SideStore can be a bit picky and will not always activate JIT (it does like 99% of the time tho dw). If it doesn't, you can just restart the app or click on the + icon and click "Request JIT from the SideStore servers (sbatupoc)"
 
 ## Building the IPA
 #### Pre-built IPAs are available in the "Releases" tab
