@@ -9,5 +9,10 @@ UntetherUTM is a (work-in-progress) UTM client that replaces JitStreamerAttach w
 - iOS 14.0 or later
 - SideStore (2/10/23 pull-request build or later)
 
+### Notes
+
+- SideStore can be a bit picky and will not always activate JIT (it does like 90% of the time tho dw). If it doesn't, you can just restart the app or click on the + icon and click "Request JIT from the SideStore servers (sbatupoc)"
+
 ## Building the IPA
-Under Construction
+#### Pre-built IPAs are available in the "Releases" tab
+You build the ipa the same way you compile the original. Follow [this](Documentation/iOSDevelopment.md) tutorial
