@@ -8,7 +8,7 @@ UntetherUTM is a modified UTM client that replaces JitStreamerAttach with sbatup
 ### Requirements
 
 - iOS 14.0 or later
-- SideStore (2/10/23 pull-request build or later)
+- SideStore (2/11/23 pull-request build or later)
 
 ### Notes
 
