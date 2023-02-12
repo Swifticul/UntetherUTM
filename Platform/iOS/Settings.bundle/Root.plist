@@ -2756,7 +2756,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Enable spatupoc execution</string>
+			<string>Enable JitKit-SbATU-POC execution</string>
 			<key>Key</key>
 			<string>JitStreamerAttach</string>
 			<key>DefaultValue</key>
