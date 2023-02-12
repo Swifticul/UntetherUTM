@@ -1,3 +1,4 @@
+![Whitelist Icon](./img/appicon.png)
 # UntetherUTM
 
 ## Info
