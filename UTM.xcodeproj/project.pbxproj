@@ -4906,6 +4906,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = UntetherUTM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4933,6 +4934,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = UntetherUTM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5216,6 +5218,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "UntetherUTM SE";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5247,6 +5250,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "UntetherUTM SE";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
