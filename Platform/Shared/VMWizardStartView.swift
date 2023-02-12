@@ -126,6 +126,13 @@ struct VMWizardStartView: View {
                         Image(systemName: "arrow.down.doc")
                     }
                 }
+                Link(destination: URL(string: "sidestore://sidejit-enable?url=com.swifticul.UntetherUTM")!) {
+                    Label {
+                        Text("Request JIT from the SideStore servers (sbatupoc)")
+                    } icon: {
+                        Image(systemName: "arrow.down.circle")
+                    }
+                }
             } header: {
                 Text("Existing")
             }

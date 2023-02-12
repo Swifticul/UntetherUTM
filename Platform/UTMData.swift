@@ -924,7 +924,7 @@ class UTMData: ObservableObject {
 #endif
 
     // MARK - JitStreamer
-
+    
 #if os(iOS)
     @available(iOS 15, *)
     func jitStreamerAttach() {
