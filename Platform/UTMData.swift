@@ -927,38 +927,11 @@ class UTMData: ObservableObject {
 
 #if os(iOS)
     @available(iOS 15, *)
-    func jitStreamerAttach() async throws {
-        let urlString = String(
-            format: "http://%@/attach/%ld/",
-            UserDefaults.standard.string(forKey: "JitStreamerAddress") ?? "",
-            getpid()
-        )
-        if let url = URL(string: urlString) {
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.httpBody = "".data(using: .utf8)
-            var attachError: Error?
-            do {
-                let (data, _) = try await URLSession.shared.data(for: request)
-                let attachResponse = try JSONDecoder().decode(AttachResponse.self, from: data)
-                if !attachResponse.success {
-                    attachError = String.localizedStringWithFormat(NSLocalizedString("Failed to attach to JitStreamer:\n%@", comment: "ContentView"), attachResponse.message)
-                } else {
-                    Main.jitAvailable = true
-                }
-            } catch is DecodingError {
-                throw NSLocalizedString("Failed to decode JitStreamer response.", comment: "ContentView")
-            } catch {
-                throw NSLocalizedString("Failed to attach to JitStreamer.", comment: "ContentView")
-            }
-            if let attachError = attachError {
-                throw attachError
-            }
-        } else {
-            throw String.localizedStringWithFormat(NSLocalizedString("Invalid JitStreamer attach URL:\n%@", comment: "ContentView"), urlString)
+    func jitStreamerAttach() {
+        if let url = URL(string: "sidestore://sidejit-enable?url=com.swifticul.UntetherUTM") {
+            UIApplication.shared.open(url)
         }
     }
-
     private struct AttachResponse: Decodable {
         var message: String
         var success: Bool
