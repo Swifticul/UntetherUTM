@@ -7,7 +7,7 @@ UntetherUTM is a modified UTM client that replaces standard UTM code with sbatup
 ## Requirements
 
 - iOS 14.0 to iOS 16.x (iOS 17.0 or later for SideJITServer builds)
-- SideStore (pull-request build from February 11, 2023, or later)
+- SideStore (latest pull-request build)
 
 ## Important Notes
 
