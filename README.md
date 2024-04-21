@@ -1,4 +1,4 @@
-<img src="./img/appicon.png" alt="Whitelist Icon" width="50" height="50">
+<img src="./appicon.png" alt="Whitelist Icon" width="50" height="50">
 
 # UntetherUTM
 
