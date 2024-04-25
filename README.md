@@ -6,12 +6,12 @@ UntetherUTM is a modified UTM client that replaces standard UTM code with sbatup
 
 ## Requirements
 
-- iOS 14.0 to iOS 16.x (iOS 17.0 or later for SJS builds)
+- iOS 14.0 to iOS 16.x (iOS 17.0 or later for SideJITServer)
 - SideStore (latest pull-request build)
 
 ## Important Notes
 
-- SideStore might not always activate JIT when using sbatupoc; this happens infrequently. If it occurs, you can either restart the app or tap the + icon to request JIT activation from the SideStore servers (or on SJS builds, from SideJITServer).
+- SideStore might not always activate JIT when using sbatupoc; this happens infrequently. If it occurs, you can either restart the app or tap the + icon to request JIT activation from the SideStore servers (or from SideJITServer on iOS 17 or later).
 
 ## Building the IPA
 
