@@ -15,13 +15,47 @@
 //
 
 import SwiftUI
+import Foundation
+import UIKit
 #if canImport(Virtualization)
 import Virtualization
 #endif
 
+class UserDefaultsManager {
+    private let defaults = UserDefaults.standard
+    
+    var userServer: String? {
+        get {
+            return defaults.string(forKey: "userServer")
+        }
+        set {
+            if let newValue = newValue {
+                defaults.set(newValue, forKey: "userServer")
+            } else {
+                defaults.removeObject(forKey: "userServer")
+            }
+        }
+    }
+
+    var userUDID: String? {
+        get {
+            return defaults.string(forKey: "userUDID")
+        }
+        set {
+            if let newValue = newValue {
+                defaults.set(newValue, forKey: "userUDID")
+            } else {
+                defaults.removeObject(forKey: "userUDID")
+            }
+        }
+    }
+}
+
 struct VMWizardStartView: View {
     @ObservedObject var wizardState: VMWizardState
-    
+
+    let userDefaultsManager = UserDefaultsManager()
+
     var isVirtualizationSupported: Bool {
         #if os(macOS)
         VZVirtualMachine.isSupported && !processIsTranslated()
@@ -29,7 +63,7 @@ struct VMWizardStartView: View {
         UTMCapabilities.current.contains(.hasHypervisorSupport)
         #endif
     }
-    
+
     var isEmulationSupported: Bool {
         #if !WITH_JIT
         true
@@ -37,7 +71,7 @@ struct VMWizardStartView: View {
         Main.jitAvailable
         #endif
     }
-    
+
     var body: some View {
         VMWizardContent("Start") {
             Section {
@@ -46,13 +80,10 @@ struct VMWizardStartView: View {
                     wizardState.next()
                 } label: {
                     HStack {
-                        Image(systemName: "hare")
-                            .font(.title)
+                        Image(systemName: "hare").font(.title)
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Virtualize")
-                                .font(.title)
-                            Text("Faster, but can only run the native CPU architecture.")
-                                .font(.caption)
+                            Text("Virtualize").font(.title)
+                            Text("Faster, but can only run the native CPU architecture.").font(.caption)
                         }
                         Spacer()
                     }
@@ -64,8 +95,7 @@ struct VMWizardStartView: View {
                 if #available(iOS 15, *) {
                     virtButton
                 } else {
-                    virtButton
-                        .opacity(isVirtualizationSupported ? 1 : 0.5)
+                    virtButton.opacity(isVirtualizationSupported ? 1 : 0.5)
                 }
                 #else
                 virtButton
@@ -76,20 +106,17 @@ struct VMWizardStartView: View {
                     wizardState.next()
                 } label: {
                     HStack {
-                        Image(systemName: "tortoise")
-                            .font(.title)
+                        Image(systemName: "tortoise").font(.title)
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Emulate")
-                                .font(.title)
-                            Text("Slower, but can run other CPU architectures.")
-                                .font(.caption)
+                            Text("Emulate").font(.title)
+                            Text("Slower, but can run other CPU architectures.").font(.caption)
                         }
                         Spacer()
                     }
                     .padding()
                 }
                 .buttonStyle(.inList)
-                
+
             } header: {
                 Text("Custom")
             } footer: {
@@ -101,6 +128,7 @@ struct VMWizardStartView: View {
                     Text("This build does not emulation.")
                 }
             }
+
             Section {
                 Button {
                     NotificationCenter.default.post(name: NSNotification.OpenVirtualMachine, object: nil)
@@ -114,6 +142,7 @@ struct VMWizardStartView: View {
                 #if os(macOS)
                 .buttonStyle(.link)
                 #endif
+
                 Link(destination: URL(string: "https://mac.getutm.app/gallery/")!) {
                     Label {
                         Text("Download prebuilt from UTM Gallery…")
@@ -125,9 +154,45 @@ struct VMWizardStartView: View {
                 Text("Existing")
             }
 
+            Section {
+                if Main.jitAvailable {
+                    Label("JIT-acceleration is enabled", systemImage: "checkmark.circle")
+                } else {
+                    Label("JIT-acceleration is disabled", systemImage: "xmark.circle")
+                }
+                Button {
+                    resetSideJITDetailsAndQuit()
+                } label: {
+                    Label {
+                        Text("Reset SideJITServer details...")
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                }
+            } header: {
+                Text("UntetherUTM")
+            }
         }
     }
-    
+        
+    private func resetSideJITDetailsAndQuit() {
+            userDefaultsManager.userServer = nil
+            userDefaultsManager.userUDID = nil
+
+            poopTheThing()
+        }
+
+    private func poopTheThing() {
+        if let window = UIApplication.shared.windows.first {
+            window.isHidden = true
+            window.rootViewController = nil
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            exit(0)
+        }
+    }
+
     private func processIsTranslated() -> Bool {
         let key = "sysctl.proc_translated"
         var ret = Int32(0)

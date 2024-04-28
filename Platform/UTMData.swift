@@ -53,6 +53,11 @@ struct AlertMessage: Identifiable {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
     
+    enum UserDefaultKeys {
+        static let userServer = "userServer"
+        static let userUDID = "userUDID"
+    }
+    
     /// View: show VM settings
     @Published var showSettingsModal: Bool
     
@@ -75,19 +80,41 @@ struct AlertMessage: Identifiable {
         }
     }
     
+    class UserDefaultsManager {
+        private let defaults = UserDefaults.standard
+        
+        var userServer: String? {
+            get {
+                return defaults.string(forKey: UserDefaultKeys.userServer)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaultKeys.userServer)
+            }
+        }
+        
+        var userUDID: String? {
+            get {
+                return defaults.string(forKey: UserDefaultKeys.userUDID)
+            }
+            set {
+                defaults.set(newValue, forKey: UserDefaultKeys.userUDID)
+            }
+        }
+    }
+    
     /// View: all pending VMs listed (ZIP and IPSW downloads)
     @Published private(set) var pendingVMs: [UTMPendingVirtualMachine]
     
-    #if os(macOS)
+#if os(macOS)
     /// View controller for every VM currently active
     var vmWindows: [VMData: Any] = [:]
-    #else
+#else
     /// View controller for currently active VM
     var vmVC: Any?
     
     /// View state for active VM primary display
     @State var vmPrimaryWindowState: VMWindowState?
-    #endif
+#endif
     
     /// Shortcut for accessing FileManager.default
     nonisolated private var fileManager: FileManager {
@@ -98,18 +125,18 @@ struct AlertMessage: Identifiable {
     nonisolated private var documentsURL: URL {
         UTMData.defaultStorageUrl
     }
-
-    #if WITH_SERVER
+    
+#if WITH_SERVER
     /// Remote access server
     private(set) var remoteServer: UTMRemoteServer!
-
+    
     /// Listeners for remote access
     private var remoteChangeListeners: [VMData: Set<AnyCancellable>] = [:]
-
+    
     /// Listener for list changes
     private var listChangedListener: AnyCancellable?
-    #endif
-
+#endif
+    
     /// Queue to run `busyWork` tasks
     private var busyQueue: DispatchQueue
     
@@ -121,10 +148,10 @@ struct AlertMessage: Identifiable {
         self.virtualMachines = []
         self.pendingVMs = []
         self.selectedVM = nil
-        #if WITH_SERVER
+#if WITH_SERVER
         self.remoteServer = UTMRemoteServer(data: self)
         beginObservingChanges()
-        #endif
+#endif
         listLoadFromDefaults()
     }
     
@@ -403,14 +430,14 @@ struct AlertMessage: Identifiable {
     }
     
     func showSettingsForCurrentVM() {
-        #if os(iOS) || os(visionOS)
+#if os(iOS) || os(visionOS)
         // SwiftUI bug: cannot show modal at the same time as changing selected VM or it breaks
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
             self.showSettingsModal = true
         }
-        #else
+#else
         showSettingsModal = true
-        #endif
+#endif
     }
     
     // MARK: - VM operations
@@ -420,13 +447,13 @@ struct AlertMessage: Identifiable {
     func save(vm: VMData) async throws {
         do {
             try await vm.save()
-            #if WITH_SERVER
+#if WITH_SERVER
             if let qemuConfig = vm.config as? UTMQemuConfiguration {
                 await remoteServer.broadcast { remote in
                     try await remote.qemuConfigurationHasChanged(id: vm.id, configuration: qemuConfig)
                 }
             }
-            #endif
+#endif
         } catch {
             // refresh the VM object as it is now stale
             let origError = error
@@ -495,7 +522,7 @@ struct AlertMessage: Identifiable {
     @discardableResult func clone(vm: VMData) async throws -> VMData {
         let newName: String = newDefaultVMName(base: vm.detailsTitleLabel)
         let newPath = ConcreteVirtualMachine.virtualMachinePath(for: newName, in: documentsURL)
-
+        
         try await copyItemWithCopyfile(at: vm.pathUrl, to: newPath)
         guard let newVM = try? VMData(url: newPath) else {
             throw UTMDataError.cloneFailed
@@ -560,14 +587,14 @@ struct AlertMessage: Identifiable {
             copy.drives = []
             _ = try await create(config: copy)
         }
-        #if os(macOS)
+#if os(macOS)
         if let copy = copy as? UTMAppleConfiguration {
             copy.information.name = self.newDefaultVMName(base: copy.information.name)
             copy.information.uuid = UUID()
             copy.drives = []
             _ = try await create(config: copy)
         }
-        #endif
+#endif
         showSettingsForCurrentVM()
     }
     
@@ -659,7 +686,7 @@ struct AlertMessage: Identifiable {
         listAdd(vm: vm)
         listSelect(vm: vm)
     }
-
+    
     private func copyItemWithCopyfile(at srcURL: URL, to dstURL: URL) async throws {
         try await Task.detached(priority: .userInitiated) {
             let status = copyfile(srcURL.path, dstURL.path, nil, copyfile_flags_t(COPYFILE_ALL | COPYFILE_RECURSIVE | COPYFILE_CLONE | COPYFILE_DATA_SPARSE))
@@ -671,7 +698,7 @@ struct AlertMessage: Identifiable {
     
     // MARK: - Downloading VMs
     
-    #if os(macOS) && arch(arm64)
+#if os(macOS) && arch(arm64)
     /// Create a new VM using configuration and downloaded IPSW
     /// - Parameter config: Apple VM configuration
     @available(macOS 12, *)
@@ -695,8 +722,8 @@ struct AlertMessage: Identifiable {
             listRemove(pendingVM: task.pendingVM)
         }
     }
-    #endif
-
+#endif
+    
     /// Create a new VM by downloading a .zip and extracting it
     /// - Parameter components: Download URL components
     func downloadUTMZip(from url: URL) {
@@ -746,7 +773,7 @@ struct AlertMessage: Identifiable {
     
     // MARK: - Reclaim space
     
-    #if os(macOS)
+#if os(macOS)
     /// Reclaim empty space in a file by (re)-converting it to QCOW2
     ///
     /// This will overwrite driveUrl with the converted file on success!
@@ -768,12 +795,12 @@ struct AlertMessage: Identifiable {
     func qcow2DriveSize(for driveUrl: URL) async -> Int64 {
         return (try? await UTMQemuImage.size(image: driveUrl)) ?? 0
     }
-
+    
     func resizeQcow2Drive(for driveUrl: URL, sizeInMib: Int) async throws {
         let bytesinMib = 1048576
         try await UTMQemuImage.resize(image: driveUrl, size: UInt64(sizeInMib * bytesinMib))
     }
-    #endif
+#endif
     
     // MARK: - UUID migration
     
@@ -798,11 +825,11 @@ struct AlertMessage: Identifiable {
         }
         vm.changeUuid(to: UUID(), name: nil, copyingEntry: vm.registryEntry)
     }
-
+    
     // MARK: - Change listener
-
+    
     private func beginObservingChanges() {
-        #if WITH_SERVER
+#if WITH_SERVER
         listChangedListener = $virtualMachines.sink { vms in
             Task {
                 await self.remoteServer.broadcast { remote in
@@ -810,11 +837,11 @@ struct AlertMessage: Identifiable {
                 }
             }
         }
-        #endif
+#endif
     }
-
+    
     private func beginObservingChanges(for vm: VMData) {
-        #if WITH_SERVER
+#if WITH_SERVER
         var observers = Set<AnyCancellable>()
         let registryEntry = vm.registryEntry
         observers.insert(vm.objectWillChange.sink { [self] _ in
@@ -843,15 +870,15 @@ struct AlertMessage: Identifiable {
             })
         }
         remoteChangeListeners[vm] = observers
-        #endif
+#endif
     }
-
+    
     private func endObservingChanges(for vm: VMData) {
-        #if WITH_SERVER
+#if WITH_SERVER
         remoteChangeListeners.removeValue(forKey: vm)
-        #endif
+#endif
     }
-
+    
     // MARK: - Other utility functions
     
     /// In some regions, iOS will prompt the user for network access
@@ -901,7 +928,7 @@ struct AlertMessage: Identifiable {
             }
         }
     }
-
+    
     // MARK: - AltKit
     
 #if canImport(AltKit) && WITH_JIT
@@ -957,46 +984,89 @@ struct AlertMessage: Identifiable {
         }
     }
 #endif
-
-    // MARK - JitStreamer
-
+    
+    // MARK - sbatupoc/SideJITServer
+    
 #if os(iOS) || os(visionOS)
-    @available(iOS 15, *)
+    
+    @available(iOS 14, *)
     func jitStreamerAttach() async throws {
-        let urlString = String(
-            format: "http://%@/attach/%ld/",
-            UserDefaults.standard.string(forKey: "JitStreamerAddress") ?? "",
-            getpid()
-        )
-        if let url = URL(string: urlString) {
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.httpBody = "".data(using: .utf8)
-            var attachError: Error?
-            do {
-                let (data, _) = try await URLSession.shared.data(for: request)
-                let attachResponse = try JSONDecoder().decode(AttachResponse.self, from: data)
-                if !attachResponse.success {
-                    attachError = String.localizedStringWithFormat(NSLocalizedString("Failed to attach to JitStreamer:\n%@", comment: "ContentView"), attachResponse.message)
-                } else {
-                    Main.jitAvailable = true
+        let userDefaultsManager = UserDefaultsManager()
+        
+        if #available(iOS 17.0, *) {
+            var userServer = userDefaultsManager.userServer
+            var userUDID = userDefaultsManager.userUDID
+            
+            if userServer == nil || userUDID == nil {
+                await promptUserForServerDetails()
+                userServer = userDefaultsManager.userServer
+                userUDID = userDefaultsManager.userUDID
+            }
+            
+            guard let server = userServer, let udid = userUDID else {
+                print("Missing required details for SideJITServer.")
+                return
+            }
+            
+            let path = "/UTM/"
+            let urlString = "http://\(server)/\(udid)\(path)"
+            
+            guard let url = URL(string: urlString) else {
+                print("Invalid URL")
+                return
+            }
+            
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                } else if let data = data {
+                    print("Received data: \(data)")
                 }
-            } catch is DecodingError {
-                throw UTMDataError.jitStreamerDecodeFailed
-            } catch {
-                throw UTMDataError.jitStreamerAttachFailed
             }
-            if let attachError = attachError {
-                throw attachError
-            }
+            
+            task.resume()
         } else {
-            throw UTMDataError.jitStreamerUrlInvalid(urlString)
+            // For iOS 14 to 16.x, use sbatupoc
+            if let url = URL(string: "sidestore://sidejit-enable?bid=\(Bundle.main.bundleIdentifier ?? "com.swifticul.UntetherUTM")") {
+                await UIApplication.shared.open(url)
+            }
         }
     }
-
-    private struct AttachResponse: Decodable {
-        var message: String
-        var success: Bool
+    
+    private func promptUserForServerDetails() async {
+        let alertController = UIAlertController(
+            title: "Enter SideJITServer Details",
+            message: "For UntetherUTM to work on iOS 17.0 or later, you'll need to run SideJITServer on a local computer. \n\nIf you have the server address and the UDID of your target device, enter them below to proceed. When you're finished, click ''Save'' and restart the app to apply the changes.\n\nNOTE: Avoid having both the original UTM and UntetherUTM installed simultaneously. The original UTM could possibly interfere with the SideJITServer process.",
+            preferredStyle: .alert
+        )
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "000.000.0.000:0000"
+            textField.text = UserDefaultsManager().userServer
+        }
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "00000000-0000000000000000"
+            textField.text = UserDefaultsManager().userUDID
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            let userDefaultsManager = UserDefaultsManager()
+            if let server = alertController.textFields?[0].text,
+               let udid = alertController.textFields?[1].text {
+                userDefaultsManager.userServer = server
+                userDefaultsManager.userUDID = udid
+            }
+        }
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        DispatchQueue.main.async {
+            if let viewController = UIApplication.shared.windows.first?.rootViewController {
+                viewController.present(alertController, animated: true)
+            }
+        }
     }
 #endif
 }

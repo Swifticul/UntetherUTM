@@ -2813,7 +2813,7 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>JitStreamer</string>
+			<string>UntetherUTM</string>
 			<key>ExcludeTargets</key>
 			<array>
 				<string>iOS-Remote</string>
@@ -2824,26 +2824,11 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Enable JitStreamer Attach</string>
+			<string>Enable untethered JIT-activation</string>
 			<key>Key</key>
 			<string>JitStreamerAttach</string>
 			<key>DefaultValue</key>
 			<false/>
-			<key>ExcludeTargets</key>
-			<array>
-				<string>iOS-Remote</string>
-				<string>iOS-SE</string>
-			</array>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>JitStreamer IP Address</string>
-			<key>Key</key>
-			<string>JitStreamerAddress</string>
-			<key>DefaultValue</key>
-			<string>69.69.0.1</string>
 			<key>ExcludeTargets</key>
 			<array>
 				<string>iOS-Remote</string>

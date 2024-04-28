@@ -1,4 +1,5 @@
 {
+  "originHash" : "6358870c201c7e551f0251d6dbd3b449a4b2a086332059bb7f4288bf24091b6a",
   "pins" : [
     {
       "identity" : "altkit",
@@ -127,5 +128,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
