@@ -4482,6 +4482,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(IOS_CODE_SIGN_ENTITLEMENTS)";
 				"CODE_SIGN_ENTITLEMENTS[sdk=xros*]" = "";
 				CODE_SIGN_IDENTITY = "$(CODE_SIGN_IDENTITY_IOS:default=Apple Development)";
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4492,13 +4493,15 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = UntetherUTM;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.utmapp).UTM";
+				MARKETING_VERSION = "4.5.1 (sbatupoc 2.1.0)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.swifticul).UntetherUTM";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -4506,7 +4509,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Services/Swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -4519,6 +4522,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(IOS_CODE_SIGN_ENTITLEMENTS)";
 				"CODE_SIGN_ENTITLEMENTS[sdk=xros*]" = "";
 				CODE_SIGN_IDENTITY = "$(CODE_SIGN_IDENTITY_IOS:default=Apple Development)";
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4529,20 +4533,22 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Platform/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = UntetherUTM;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.utmapp).UTM";
+				MARKETING_VERSION = "4.5.1 (sbatupoc 2.1.0)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.swifticul).UntetherUTM";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WITH_JIT WITH_SOLO_VM WITH_USB WITH_LOCATION_BACKGROUND $(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Services/Swift-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -4569,7 +4575,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.utmapp).UTM";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.swifticul).UntetherUTM";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(PROVISIONING_PROFILE_SPECIFIER_MAC:default=)";
 				SUPPORTED_PLATFORMS = macosx;
@@ -4603,7 +4609,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.utmapp).UTM";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_PREFIX:default=com.swifticul).UntetherUTM";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "$(PROVISIONING_PROFILE_SPECIFIER_MAC:default=)";
 				SUPPORTED_PLATFORMS = macosx;
